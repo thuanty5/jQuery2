@@ -1,6 +1,5 @@
+//put local storage
 $(document).ready(function(){
-
-
 
 	console.log("connected");
 	var advanceTask = function(task) {
@@ -20,18 +19,17 @@ $(document).ready(function(){
 	  task.remove();
 	};
 
-
-
 	//hide newTaskForm id from html
 	$('#newTaskForm').hide();	
 
-	var list0 = [];
+	var listo = [];
 
 	var Task = function(task){
 		this.task = task;
 		this.id = "new";
 	}
 
+	//add todo to #newList
 	var addTask = function(task){
 		if(task){
 			task = new Task(task);
@@ -49,36 +47,34 @@ $(document).ready(function(){
                 '</a>'
 				);
 			$("#newTaskForm").slideToggle("fast", "linear");
+			
 		}
 	};
 
+	// add item by enter
+	$("#newItemInput").keyup(function(e){
+    if(e.keyCode == 13){
+        $("#saveNewItem").click();
+    }
+	});
+	// add item by click
 	$("#saveNewItem").on("click", function(e){
 		e.preventDefault();
 		var task = $("#newItemInput").val().trim();
-		addTack(task);
+		addTask(task);
 	});
 
+	//toggle add-todo
 	$("#add-todo").on("click", function(){
 		$("#newTaskForm").fadeToggle("fast", "linear");
 	});
 
+	//click X to cancel add-todo
 	$("#cancel").on("click", function(e){
 		e.preventDefault();
 		$("#newTaskForm").fadeToggle("fast", "linear");
 	});
 
-
-
-	$(document).on('click', '#item', function(e) {
-		e.preventDefault();
-	});
-	
-	$(document).on('click', '#item', function(e) {
-		e.preventDefault();
-		var task = this;		
-		advanceTask(task);
-		this.id = 'inProgress';
-	});
 	$(document).on('click', '#item', function(e) {
 		e.preventDefault();
 		var task = this;		
@@ -86,6 +82,7 @@ $(document).ready(function(){
 		this.id = 'inProgress';
 		$('#currentList').append(this.outerHTML);
 	});
+
 	$(document).on('click', '#inProgress', function (e) {
 		e.preventDefault();
 		var task = this;
@@ -94,10 +91,20 @@ $(document).ready(function(){
 		advanceTask(task);
 		$('#archivedList').append(changeIcon);
 	});
+
 	$(document).on('click', '#archived', function (e) {
 		e.preventDefault();
 		var task = this;
 		advanceTask(task);
 	});
 
+	function supports_html5_storage() {
+		try {
+			return 'localStorage' in window && window['localStorage'] !== null;
+		} catch (e) {
+			return false;
+		}
+	}
+
 });
+
